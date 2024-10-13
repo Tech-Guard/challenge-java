@@ -1,15 +1,19 @@
 package br.com.fiap.techguard.cliente;
 
+import br.com.fiap.techguard.dao.ClienteDAO;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class SistemaUsuarios {
 
     private List<Cliente> clientes;
+    private ClienteDAO clienteDAO;
 
-    // Construtores
+    // Construtor
     public SistemaUsuarios() {
-        this.clientes = new ArrayList<>();
+        this.clientes = new ArrayList<>();  // Inicializando a lista clientes
+        this.clienteDAO = new ClienteDAO(); // Inicializando o DAO
     }
 
     // Método de cadastrar usuário
@@ -24,7 +28,14 @@ public class SistemaUsuarios {
                 return false;
             }
         }
-        clientes.add(new Cliente(nome, cpf, telefone, email, senha));
+
+        if (clienteDAO.clienteExiste(cpf, email, telefone)) {
+            return false;
+        }
+        Cliente novoCliente = new Cliente(nome, cpf, telefone, email, senha);
+        clientes.add(novoCliente);
+        clienteDAO.insert(novoCliente);
+
         return true;
     }
 
@@ -37,6 +48,14 @@ public class SistemaUsuarios {
                 return cliente; // Login bem-sucedido
             }
         }
+        // Se não encontrar na lista local, faz a verificação no banco de dados
+        ClienteDAO clienteDAO = new ClienteDAO();
+        Cliente clienteBanco = clienteDAO.buscarPorEmail(email); // Método no DAO que busca pelo email
+
+        if (clienteBanco != null && clienteBanco.verificarSenha(senha)) {
+            return clienteBanco; // Login bem-sucedido no banco de dados
+        }
+
         return null;
     }
 

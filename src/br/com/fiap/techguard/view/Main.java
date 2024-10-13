@@ -2,6 +2,7 @@ package br.com.fiap.techguard.view;
 
 import br.com.fiap.techguard.cliente.Cliente;
 import br.com.fiap.techguard.cliente.SistemaUsuarios;
+import br.com.fiap.techguard.dao.ClienteDAO;
 import br.com.fiap.techguard.diagnostico.Diagnostico;
 import br.com.fiap.techguard.endereco.Endereco;
 import br.com.fiap.techguard.oficina.Oficina;
@@ -26,7 +27,7 @@ public class Main {
 
         // Instanciando Cliente
         Cliente cliente = new Cliente();
-        Cliente cliente2 = new Cliente("João Silva", "123.456.789-09", "(11) 98765-4321", "joao@gmail.com", "123", endereco);
+        Cliente cliente2 = new Cliente("João Silva", "12345678909", "(11) 98765-4321", "joao@gmail.com", "123", endereco);
         sistemaUsuarios.cadastrarUsuario(cliente2.getNome(), cliente2.getCpf(), cliente2.getTelefone(), cliente2.getEmail(), cliente2.getSenha());
 
         // Instanciando Veículo
