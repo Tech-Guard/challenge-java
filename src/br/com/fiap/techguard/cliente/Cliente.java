@@ -20,10 +20,6 @@ public class Cliente {
         return this.senha.equals(senha);
     }
 
-    // Método de retornar dados do cliente
-    public String retornarDados() {
-        return "\nNOME: " + nome + "\nTELEFONE: " + telefone + "\nCPF: " + cpf + "\nEMAIL: " + email + "\nSENHA: " + senha;
-    }
 
     // Construtores
     public Cliente(String id, String nome, String telefone, String cpf, String email, String senha) {
@@ -92,5 +88,16 @@ public class Cliente {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    @Override
+    public String toString() {
+        return  "ID       - " + id + "\n" +
+                "NOME     - " + nome + "\n" +
+                "TELEFONE - " + telefone + "\n" +
+                "CPF      - " + cpf + "\n" +
+                "EMAIL    - " + email + "\n" +
+                "SENHA    - " + senha + "\n";
+
     }
 }

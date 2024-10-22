@@ -25,7 +25,7 @@ public class SistemaUsuarios {
             return false;
         }
         Cliente novoCliente = new Cliente(nome, telefone, cpf, email, senha);
-        clienteDAO.insert(novoCliente);
+        clienteDAO.cadastrar(novoCliente);
 
         return true;
     }
