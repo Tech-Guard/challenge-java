@@ -8,12 +8,12 @@ import java.util.Set;
 public class Cliente {
 
     // Atributos
+    private String id;
     private String nome;
-    private String cpf;
     private String telefone;
+    private String cpf;
     private String email;
     private String senha;
-    private Endereco endereco;
 
     // Método de verificar senha
     public boolean verificarSenha(String senha) {
@@ -22,30 +22,38 @@ public class Cliente {
 
     // Método de retornar dados do cliente
     public String retornarDados() {
-        return "\nNOME: " + nome + "\nCPF: " + cpf + "\nTELEFONE: " + telefone + "\nEMAIL: " + email + "\nSENHA: " + senha;
+        return "\nNOME: " + nome + "\nTELEFONE: " + telefone + "\nCPF: " + cpf + "\nEMAIL: " + email + "\nSENHA: " + senha;
     }
 
     // Construtores
-    public Cliente(String nome, String cpf, String telefone, String email, String senha) {
+    public Cliente(String id, String nome, String telefone, String cpf, String email, String senha) {
+        this.id = id;
         this.nome = nome;
-        this.cpf = cpf;
         this.telefone = telefone;
+        this.cpf = cpf;
         this.email = email;
         this.senha = senha;
     }
 
-    public Cliente(String nome, String cpf, String telefone, String email, String senha, Endereco endereco) {
+    public Cliente(String nome, String telefone, String cpf, String email, String senha) {
         this.nome = nome;
-        this.cpf = cpf;
         this.telefone = telefone;
+        this.cpf = cpf;
         this.email = email;
         this.senha = senha;
-        this.endereco = endereco;
     }
 
     public Cliente () {}
 
     // Getters e Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -54,20 +62,20 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
     public String getTelefone() {
         return telefone;
     }
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -84,13 +92,5 @@ public class Cliente {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    public Endereco getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
     }
 }

@@ -7,33 +7,24 @@ import java.util.List;
 
 public class SistemaUsuarios {
 
-    private List<Cliente> clientes;
     private ClienteDAO clienteDAO;
 
     // Construtor
     public SistemaUsuarios() {
-        this.clientes = new ArrayList<>();  // Inicializando a lista clientes
         this.clienteDAO = new ClienteDAO(); // Inicializando o DAO
     }
 
     // Método de cadastrar usuário
-    public boolean cadastrarUsuario(String nome, String cpf, String telefone, String email, String senha) {
+    public boolean cadastrarUsuario(String nome, String telefone, String cpf, String email, String senha) {
         cpf = cpf.trim();
         email = email.trim();
         telefone = telefone.trim();
         nome = nome.trim();
 
-        for (Cliente cliente : clientes) {
-            if (cliente.getEmail().equals(email) || cliente.getCpf().equals(cpf) || cliente.getTelefone().equals(telefone)) {
-                return false;
-            }
-        }
-
-        if (clienteDAO.clienteExiste(cpf, email, telefone)) {
+        if (clienteDAO.clienteExiste(telefone, cpf, email)) {
             return false;
         }
-        Cliente novoCliente = new Cliente(nome, cpf, telefone, email, senha);
-        clientes.add(novoCliente);
+        Cliente novoCliente = new Cliente(nome, telefone, cpf, email, senha);
         clienteDAO.insert(novoCliente);
 
         return true;
@@ -43,12 +34,6 @@ public class SistemaUsuarios {
     public Cliente loginUsuario(String email, String senha) {
         email = email.trim();
 
-        for (Cliente cliente : clientes) {
-            if (cliente.getEmail().equals(email) && cliente.verificarSenha(senha)) {
-                return cliente; // Login bem-sucedido
-            }
-        }
-        // Se não encontrar na lista local, faz a verificação no banco de dados
         ClienteDAO clienteDAO = new ClienteDAO();
         Cliente clienteBanco = clienteDAO.buscarPorEmail(email); // Método no DAO que busca pelo email
 

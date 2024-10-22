@@ -1,7 +1,7 @@
 package br.com.fiap.techguard.dao;
 
 import br.com.fiap.techguard.cliente.Cliente;
-import br.com.fiap.techguard.database.ConexaoDB;
+import br.com.fiap.techguard.factory.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,7 +16,7 @@ public class ClienteDAO {
         PreparedStatement stmt = null;
 
         try {
-            conexao = ConexaoDB.getConnection();
+            conexao = ConnectionFactory.getConnection();
 
             String sql = "INSERT INTO T_CP_CLIENTE (ID, NOME, TELEFONE, CPF, EMAIL, SENHA) VALUES (DEFAULT, ?, ?, ?, ?, ?)";
 
@@ -45,19 +45,19 @@ public class ClienteDAO {
     }
 
     // Método de verificar se o cliente já existe
-    public boolean clienteExiste(String cpf, String email, String telefone) {
+    public boolean clienteExiste(String telefone, String cpf, String email) {
         Connection conexao = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
-            conexao = ConexaoDB.getConnection();
+            conexao = ConnectionFactory.getConnection();
 
-            String sql = "SELECT COUNT(*) FROM T_CP_CLIENTE WHERE CPF = ? OR EMAIL = ? OR TELEFONE = ?";
+            String sql = "SELECT COUNT(*) FROM T_CP_CLIENTE WHERE TELEFONE = ? OR CPF = ? OR EMAIL = ?";
             stmt = conexao.prepareStatement(sql);
-            stmt.setString(1, cpf);
-            stmt.setString(2, email);
-            stmt.setString(3, telefone);
+            stmt.setString(1, telefone);
+            stmt.setString(2, cpf);
+            stmt.setString(3, email);
 
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -83,7 +83,7 @@ public class ClienteDAO {
         Cliente cliente = null;
         String sql = "SELECT * FROM T_CP_CLIENTE WHERE EMAIL = ?";
 
-        try (Connection conexao = ConexaoDB.getConnection();
+        try (Connection conexao = ConnectionFactory.getConnection();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, email);
@@ -92,8 +92,8 @@ public class ClienteDAO {
             if (rs.next()) {
                 cliente = new Cliente(
                         rs.getString("NOME"),
-                        rs.getString("CPF"),
                         rs.getString("TELEFONE"),
+                        rs.getString("CPF"),
                         rs.getString("EMAIL"),
                         rs.getString("SENHA")
                 );

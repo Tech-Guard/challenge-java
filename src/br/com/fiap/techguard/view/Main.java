@@ -23,28 +23,27 @@ public class Main {
         // Instanciando Endereço
         Endereco endereco = new Endereco("823543-71", "Rua das Flores", 123, "São Paulo", "SP");
         Endereco endereco2 = new Endereco("912345-67", "Avenida Paulista", 1000, "São Paulo", "SP");
-        Endereco endereco3 = new Endereco("123456-78", "Rua das Laranjeiras", 456, "Rio de Janeiro", "RJ");
 
         // Instanciando Cliente
         Cliente cliente = new Cliente();
-        Cliente cliente2 = new Cliente("João Silva", "12345678909", "(11) 98765-4321", "joao@gmail.com", "123", endereco);
+        Cliente cliente2 = new Cliente("1", "João Silva", "(11) 98765-4321", "12345678909", "joao@gmail.com", "111");
         sistemaUsuarios.cadastrarUsuario(cliente2.getNome(), cliente2.getCpf(), cliente2.getTelefone(), cliente2.getEmail(), cliente2.getSenha());
 
         // Instanciando Veículo
-        Veiculo veiculo = new Veiculo("v001", "XYZ-5678", 30000, true, 2018, "Branco", "Corolla", "Toyota");
-        Veiculo veiculo2 = new Veiculo("v002", "ABC-1234", 15000, true, 2020, "Preto", "Civic", "Honda");
+        Veiculo veiculo = new Veiculo("1", "XYZ-5678", 30000, true, 2018, "Branco", "Corolla", "Toyota");
+        Veiculo veiculo2 = new Veiculo("2", "ABC-1234", 15000, true, 2020, "Preto", "Civic", "Honda");
 
         // Instanciando Diagnóstico
-        Diagnostico diagnostico = new Diagnostico("d001", "Troca de óleo", "Troca de óleo recomendada", "Baixa", "2024-05-17 10:00");
-        Diagnostico diagnostico2 = new Diagnostico("d002", "Revisão geral", "Revisão completa do veículo", "Alta", "2024-05-17 15:00");
+        Diagnostico diagnostico = new Diagnostico("1", "Troca de óleo", "Troca de óleo recomendada", "Baixa", "2024-05-17 10:00");
+        Diagnostico diagnostico2 = new Diagnostico("2", "Revisão geral", "Revisão completa do veículo", "Alta", "2024-05-17 15:00");
 
         // Instanciando Orçamento
-        Orcamento orcamento = new Orcamento("o001", "Troca de óleo", "Troca de óleo do motor", 250.00);
-        Orcamento orcamento2 = new Orcamento("o002", "Revisão geral", "Revisão completa com troca de filtros", 1200.00);
+        Orcamento orcamento = new Orcamento("1", "Troca de óleo", "Troca de óleo do motor", 250.00);
+        Orcamento orcamento2 = new Orcamento("2", "Revisão geral", "Revisão completa com troca de filtros", 1200.00);
 
         // Instanciando Oficina
-        Oficina oficina = new Oficina("of001", "Oficina SCCP", endereco2, "1234-5678", "oficina.sccp@gmail.com", "Mecânica Geral, Troca de Óleo");
-        Oficina oficina2 = new Oficina("of002", "Oficina do Marção", endereco3, "9876-5432", "oficina.marcao@gmail.com", "Pintura, Funilaria");
+        Oficina oficina = new Oficina("1", "Oficina SCCP", endereco, "1234-5678", "oficina.sccp@gmail.com", "Mecânica Geral, Troca de Óleo");
+        Oficina oficina2 = new Oficina("2", "Oficina do Marção", endereco2, "9876-5432", "oficina.marcao@gmail.com", "Pintura, Funilaria");
 
         // Redimensionando a imagem
         ImageIcon originalIcon = new ImageIcon(Main.class.getResource("/resources/logo.png"));
@@ -68,18 +67,18 @@ public class Main {
 
                     // Painel campos cadastro
                     JTextField nomeField = new JTextField();
-                    JTextField cpfField = new JTextField();
                     JTextField telefoneField = new JTextField();
+                    JTextField cpfField = new JTextField();
                     JTextField emailField = new JTextField();
                     JPasswordField passwordField1 = new JPasswordField();
 
                     JPanel panelCamposCadastro = new JPanel(new GridLayout(8, 2));
                     panelCamposCadastro.add(new JLabel("Digite seu nome:"));
                     panelCamposCadastro.add(nomeField);
-                    panelCamposCadastro.add(new JLabel("Digite seu cpf:"));
-                    panelCamposCadastro.add(cpfField);
                     panelCamposCadastro.add(new JLabel("Digite seu telefone:"));
                     panelCamposCadastro.add(telefoneField);
+                    panelCamposCadastro.add(new JLabel("Digite seu cpf:"));
+                    panelCamposCadastro.add(cpfField);
                     panelCamposCadastro.add(new JLabel("Digite seu email:"));
                     panelCamposCadastro.add(emailField);
                     panelCamposCadastro.add(new JLabel("Digite sua senha:"));
@@ -91,15 +90,15 @@ public class Main {
                     int optionCadastro = JOptionPane.showConfirmDialog(null, panelCadastro, "Cadastro", JOptionPane.OK_CANCEL_OPTION);
                     if (optionCadastro == JOptionPane.OK_OPTION) {
                         String nome = nomeField.getText();
-                        String cpf = cpfField.getText();
                         String telefone = telefoneField.getText();
+                        String cpf = cpfField.getText();
                         String email = emailField.getText();
                         String senha = new String(passwordField1.getPassword());
 
-                        if (nome.isEmpty() || cpf.isEmpty() || telefone.isEmpty() || email.isEmpty() || senha.isEmpty()) {
+                        if (nome.isEmpty() || telefone.isEmpty() || cpf.isEmpty() || email.isEmpty() || senha.isEmpty()) {
                             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
                         } else {
-                            if (sistemaUsuarios.cadastrarUsuario(nome, cpf, telefone, email, senha)) {
+                            if (sistemaUsuarios.cadastrarUsuario(nome, telefone, cpf, email, senha)) {
                                 JOptionPane.showMessageDialog(null, "Cadastro feito com sucesso!");
                             } else {
                                 JOptionPane.showMessageDialog(null, "Informações já cadastradas antes!");
