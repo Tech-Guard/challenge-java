@@ -1,5 +1,6 @@
 package br.com.fiap.techguard.view;
 
+import br.com.fiap.techguard.cors.CorsFilter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -12,12 +13,17 @@ public class App {
 
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig().packages("br.com.fiap.techguard.resource");
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+
+        rc.register(new CorsFilter());
+
+        URI uri = URI.create(BASE_URI);
+        return GrizzlyHttpServerFactory.createHttpServer(uri, rc);
     }
 
     public static void main(String[] args) {
         final HttpServer server = startServer();
         System.out.println("Servidor iniciado em " + BASE_URI);
+
         try {
             Thread.currentThread().join();
         } catch (InterruptedException e) {
