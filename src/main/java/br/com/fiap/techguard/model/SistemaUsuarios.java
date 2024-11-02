@@ -2,13 +2,15 @@ package br.com.fiap.techguard.model;
 
 import br.com.fiap.techguard.dao.ClienteDAO;
 
+import java.sql.SQLException;
+
 public class SistemaUsuarios {
 
     private ClienteDAO clienteDAO;
 
     // Construtor
     public SistemaUsuarios() {
-        this.clienteDAO = new ClienteDAO(); // Inicializando o DAO
+        this.clienteDAO = new ClienteDAO();
     }
 
     // Método de cadastrar usuário
@@ -28,11 +30,11 @@ public class SistemaUsuarios {
     }
 
     // Método de login usuário
-    public Cliente loginUsuario(String email, String senha) {
+    public Cliente loginUsuario(String email, String senha) throws SQLException {
         email = email.trim();
 
         ClienteDAO clienteDAO = new ClienteDAO();
-        Cliente clienteBanco = clienteDAO.buscarPorEmail(email); // Método no DAO que busca pelo email
+        Cliente clienteBanco = clienteDAO.buscarPorLogin(email, senha); // Método no DAO que busca pelo email
 
         if (clienteBanco != null && clienteBanco.verificarSenha(senha)) {
             return clienteBanco; // Login bem-sucedido no banco de dados

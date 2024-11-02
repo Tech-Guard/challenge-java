@@ -8,6 +8,8 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.UriBuilder;
 import jakarta.ws.rs.core.UriInfo;
+
+import java.sql.SQLException;
 import java.util.List;
 
 @Path("/cliente")
@@ -21,15 +23,49 @@ public class ClienteResource {
     @POST
     public Response criarCliente(Cliente cliente, @Context UriInfo uriInfo) {
         try {
+
+            boolean usuarioCadastrado = clienteDAO.clienteExiste(cliente.getTelefone(), cliente.getCpf(), cliente.getEmail());
+
+            if (usuarioCadastrado) {
+                return Response.status(Response.Status.CONFLICT).entity("Cliente já cadastrado.").build();
+            }
+
             clienteDAO.cadastrar(cliente);
+
             UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-            System.out.println("Cliente Criado:\n" + cliente.toString());
             return Response.created(builder.path(cliente.getId()).build()).entity(cliente).build();
+
         } catch (Exception e) {
             e.printStackTrace();
+            // Se ocorrer um erro, retorne uma resposta de erro do servidor
             return Response.serverError().entity("Erro ao criar cliente: " + e.getMessage()).build();
         }
     }
+
+    @GET
+    @Path("/login")
+    public Response loginCliente(@QueryParam("email") String email, @QueryParam("senha") String senha) {
+        try {
+            Cliente cliente = clienteDAO.buscarPorLogin(email, senha);
+            return Response.ok(cliente).build();
+        } catch (SQLException e) {
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains("Email não encontrado")) {
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("{\"message\": \"Email não encontrado\"}")
+                        .build();
+            } else if (errorMessage.contains("senha incorreta")) {
+                return Response.status(Response.Status.UNAUTHORIZED)
+                        .entity("{\"message\": \"Senha incorreta\"}")
+                        .build();
+            }
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"message\": \"Erro no servidor\"}")
+                    .build();
+        }
+    }
+
+
 
     // GET - Cliente específico
     @GET

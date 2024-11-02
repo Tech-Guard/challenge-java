@@ -145,8 +145,9 @@ public class ClienteDAO {
 
             rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) > 0; // Retorna true se existir algum registro
+                return rs.getInt(1) > 0;
             }
+            System.out.println("Cliente já cadastrado");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -163,14 +164,15 @@ public class ClienteDAO {
         return false;
     }
 
-    public Cliente buscarPorEmail(String email) {
+    public Cliente buscarPorLogin(String email, String senha) throws SQLException {
         Cliente cliente = null;
-        String sql = "SELECT * FROM T_CP_CLIENTE WHERE EMAIL = ?";
+        String sql = "SELECT * FROM T_CP_CLIENTE WHERE EMAIL = ? AND SENHA = ?";
 
         try (Connection conexao = ConnectionFactory.getConnection();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, email);
+            stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -181,11 +183,13 @@ public class ClienteDAO {
                         rs.getString("EMAIL"),
                         rs.getString("SENHA")
                 );
+            } else {
+                throw new SQLException("Email não encontrado ou senha incorreta.");
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Erro ao buscar cliente pelo email: " + email);
+            System.out.println("Erro ao buscar cliente: " + e.getMessage());
+            throw e;
         }
 
         return cliente;
