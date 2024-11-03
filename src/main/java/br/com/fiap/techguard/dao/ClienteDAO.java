@@ -1,5 +1,6 @@
 package br.com.fiap.techguard.dao;
 
+import br.com.fiap.techguard.exception.ClienteNaoEncontradoException;
 import br.com.fiap.techguard.model.Cliente;
 import br.com.fiap.techguard.factory.ConnectionFactory;
 import java.sql.*;
@@ -73,24 +74,31 @@ public class ClienteDAO {
     public Cliente pesquisarPorId(String id) {
         Cliente cliente = null;
         String sql = "SELECT * FROM T_CHALLENGE_CLIENTES WHERE clienteid = ?";
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+        try (Connection conexao = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    cliente = new Cliente();
-                    cliente.setId(rs.getString("clienteid"));
-                    cliente.setNome(rs.getString("nome"));
-                    cliente.setTelefone(rs.getString("telefone"));
-                    cliente.setCpf(rs.getString("cpf"));
-                    cliente.setEmail(rs.getString("email"));
-                    cliente.setSenha(rs.getString("senha"));
-                }
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                cliente = new Cliente(
+                        rs.getString("clienteid"),
+                        rs.getString("nome"),
+                        rs.getString("telefone"),
+                        rs.getString("cpf"),
+                        rs.getString("email"),
+                        rs.getString("senha")
+                );
+            } else {
+                throw new ClienteNaoEncontradoException("Cliente não encontrado com ID: " + id);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Erro ao pesquisar cliente", e);
         }
+
         return cliente;
     }
 
@@ -164,6 +172,7 @@ public class ClienteDAO {
         return false;
     }
 
+    // Método de buscar login cliente
     public Cliente buscarPorLogin(String email, String senha) throws SQLException {
         Cliente cliente = null;
         String sql = "SELECT * FROM T_CHALLENGE_CLIENTES WHERE EMAIL = ? AND SENHA = ?";
