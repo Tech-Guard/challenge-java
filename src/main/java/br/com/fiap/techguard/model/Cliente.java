@@ -9,6 +9,7 @@ public class Cliente {
     private String cpf;
     private String email;
     private String senha;
+    private String endereco;
 
     // Método de verificar senha
     public boolean verificarSenha(String senha) {
@@ -17,6 +18,16 @@ public class Cliente {
 
 
     // Construtores
+    public Cliente(String id, String nome, String telefone, String cpf, String email, String senha, String endereco) {
+        this.id = id;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.email = email;
+        this.senha = senha;
+        this.endereco = endereco;
+    }
+
     public Cliente(String id, String nome, String telefone, String cpf, String email, String senha) {
         this.id = id;
         this.nome = nome;
@@ -83,6 +94,14 @@ public class Cliente {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
     @Override

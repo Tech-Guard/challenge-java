@@ -15,7 +15,7 @@ public class ClienteDAO {
 
         try {
             conexao = ConnectionFactory.getConnection();
-            String sql = "INSERT INTO T_CP_CLIENTE (NOME, TELEFONE, CPF, EMAIL, SENHA) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO T_CHALLENGE_CLIENTES (NOME, TELEFONE, CPF, EMAIL, SENHA) VALUES (?, ?, ?, ?, ?)";
             stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             stmt.setString(1, cliente.getNome());
@@ -48,14 +48,14 @@ public class ClienteDAO {
     // Método de listar clientes
     public List<Cliente> listar() {
         List<Cliente> clientes = new ArrayList<>();
-        String sql = "SELECT * FROM T_CP_CLIENTE";
+        String sql = "SELECT * FROM T_CHALLENGE_CLIENTES";
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Cliente cliente = new Cliente();
-                cliente.setId(rs.getString("id"));
+                cliente.setId(rs.getString("clienteid"));
                 cliente.setNome(rs.getString("nome"));
                 cliente.setTelefone(rs.getString("telefone"));
                 cliente.setCpf(rs.getString("cpf"));
@@ -72,7 +72,7 @@ public class ClienteDAO {
     // Método de pesquisar por ID
     public Cliente pesquisarPorId(String id) {
         Cliente cliente = null;
-        String sql = "SELECT * FROM T_CP_CLIENTE WHERE id = ?";
+        String sql = "SELECT * FROM T_CHALLENGE_CLIENTES WHERE clienteid = ?";
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -80,7 +80,7 @@ public class ClienteDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     cliente = new Cliente();
-                    cliente.setId(rs.getString("id"));
+                    cliente.setId(rs.getString("clienteid"));
                     cliente.setNome(rs.getString("nome"));
                     cliente.setTelefone(rs.getString("telefone"));
                     cliente.setCpf(rs.getString("cpf"));
@@ -96,7 +96,7 @@ public class ClienteDAO {
 
     // Método de atualizar cliente
     public void atualizar(Cliente cliente) {
-        String sql = "UPDATE T_CP_CLIENTE SET nome = ?, telefone = ?, cpf = ?, email = ?, senha = ? WHERE id = ?";
+        String sql = "UPDATE T_CHALLENGE_CLIENTES SET nome = ?, telefone = ?, cpf = ?, email = ?, senha = ? WHERE clienteid = ?";
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -117,7 +117,7 @@ public class ClienteDAO {
 
     // Método de remover cliente
     public void remover(String id) {
-        String sql = "DELETE FROM T_CP_CLIENTE WHERE id = ?";
+        String sql = "DELETE FROM T_CHALLENGE_CLIENTES WHERE clienteid = ?";
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -137,7 +137,7 @@ public class ClienteDAO {
         try {
             conexao = ConnectionFactory.getConnection();
 
-            String sql = "SELECT COUNT(*) FROM T_CP_CLIENTE WHERE TELEFONE = ? OR CPF = ? OR EMAIL = ?";
+            String sql = "SELECT COUNT(*) FROM T_CHALLENGE_CLIENTES WHERE TELEFONE = ? OR CPF = ? OR EMAIL = ?";
             stmt = conexao.prepareStatement(sql);
             stmt.setString(1, telefone);
             stmt.setString(2, cpf);
@@ -166,7 +166,7 @@ public class ClienteDAO {
 
     public Cliente buscarPorLogin(String email, String senha) throws SQLException {
         Cliente cliente = null;
-        String sql = "SELECT * FROM T_CP_CLIENTE WHERE EMAIL = ? AND SENHA = ?";
+        String sql = "SELECT * FROM T_CHALLENGE_CLIENTES WHERE EMAIL = ? AND SENHA = ?";
 
         try (Connection conexao = ConnectionFactory.getConnection();
              PreparedStatement stmt = conexao.prepareStatement(sql)) {

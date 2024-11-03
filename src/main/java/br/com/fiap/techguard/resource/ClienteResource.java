@@ -37,7 +37,6 @@ public class ClienteResource {
 
         } catch (Exception e) {
             e.printStackTrace();
-            // Se ocorrer um erro, retorne uma resposta de erro do servidor
             return Response.serverError().entity("Erro ao criar cliente: " + e.getMessage()).build();
         }
     }
